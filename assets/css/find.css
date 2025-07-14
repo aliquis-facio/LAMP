@@ -1,0 +1,74 @@
+p {
+    margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #e82791;
+    margin: 4px;
+}
+
+.container {
+    height: auto;
+    width: auto;
+    max-width: 500px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    box-sizing: border-box;
+}
+
+.logo {
+    border: 0px;
+    box-sizing: border-box;
+    align-content: center;
+    /* position: static; */
+}
+
+.bodyBox {
+    background-color: #27d4e8;
+    border-radius: 10px;
+    height: fit-content;
+    width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.email-container {
+    display: none;
+    opacity: 0;
+}
+
+.number-container {
+    display: none;
+    opacity: 0;
+}
+
+#check-btn-email {
+    display: none;
+}
+
+#check-btn-number {
+    display: none;
+}
+
+#check-btn-number:checked~.number-container {
+    display: block;
+    opacity: 1;
+}
+
+#check-btn-email:checked~.email-container {
+    display: block;
+    opacity: 1;
+}

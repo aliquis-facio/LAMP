@@ -1,0 +1,59 @@
+a {
+    vertical-align: middle;
+}
+
+a.title {
+    writing-mode: vertical-rl;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.container {
+    height: auto;
+    width: auto;
+    max-width: 500px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    box-sizing: border-box;
+}
+
+.logo {
+    border: 0px;
+    box-sizing: border-box;
+    align-content: center;
+    /* position: static; */
+}
+
+.bodyBox {
+    background-color: #27d4e8;
+    border-radius: 10px;
+    width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.bodyBox .inputBox {
+    position: relative;
+    width: 100%;
+}
+
+.footBox {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#text {
+    position: static;
+}

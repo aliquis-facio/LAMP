@@ -1,0 +1,144 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 9fr;
+    grid-template-areas: 
+    "a a a a a"
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c ."
+    "b c c c .";
+}
+
+.head_box {
+    grid-area: a;
+}
+
+.side_box {
+    grid-area: b;
+}
+
+.body_box {
+    grid-area: c;
+    width: 100%;
+}
+
+.board_title {
+    font-size: larger;
+    font-weight: bold;
+    text-align: left;
+}
+
+.the_num_of_post {
+    font-size: large;
+    font-weight: bold;
+    text-align: left;
+}
+
+.logout {
+    position: absolute;
+    left: 90%;
+    top: 5%;
+    transform: translate(-50%, -50%);
+}
+
+.search_box {
+    position: absolute;
+    left: 80%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+}
+
+.title_panel, .body_panel {
+    width: 100%;
+}
+
+form {
+    display: inline;
+}
+
+.no-btn {
+    border: none;
+    padding: 0;
+
+    color: pink;
+    background: white;
+}
+
+table.table {
+    border: 1px solid #AAAAAA;
+    background-color: #FFFFFF;
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+table.table td,
+table.table th {
+    border: 1px solid #AAAAAA;
+    padding: 1px 1px;
+}
+
+table.table tbody td {
+    font-size: 16px;
+    color: #222222;
+}
+
+table.table tr:nth-child(even) {
+    background: #FFFFFF;
+}
+
+table.table td:nth-child(even) {
+    background: #FFFFFF;
+}
+
+table.table thead {
+    background: #FFFFFF;
+    background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    border-bottom: 1px solid #AAAAAA;
+}
+
+table.table thead th {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFC0CB;
+    border-left: 1px solid #AAAAAA;
+}
+
+table.table thead th:first-child {
+    border-left: none;
+}
+
+table.table tfoot {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: #FFFFFF;
+    background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+    border-top: 1px solid #AAAAAA;
+}
+
+table.table tfoot td {
+    font-size: 16px;
+}
+
+table.table tfoot .links {
+    text-align: right;
+}
+
+table.table tfoot .links a {
+    display: inline-block;
+    background: #FFC0CB;
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 5px;
+}

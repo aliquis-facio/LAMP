@@ -1,0 +1,72 @@
+form {
+    display: inline;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+hr {
+    color: gray;
+}
+
+h1 {
+    margin: 0;
+}
+
+.left {
+    position: absolute;
+    left: 0;
+}
+
+.right {
+    position: absolute;
+    right: 0;
+}
+
+.bodyBox {
+    width: 100%;
+    height: auto;
+}
+
+#writer_link {
+    text-align: left;
+}
+
+.container {
+    width: 600px;
+    height: 100%;
+
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+
+    border: 1px;
+    border-radius: 4%;
+}
+
+.post_header {
+    margin: 0;
+}
+
+.coment {
+    margin: 0;
+}
+
+.grey {
+    color: grey;
+}
+
+.small_font {
+    font-size: 13px;
+}
+
+.strong_font {
+    font: bold;
+}
+
+.thin_font {
+    font-weight: 100;
+}

@@ -1,0 +1,37 @@
+button {
+    margin-top: 10px;
+}
+
+button .long {
+    height: 40px;
+    width: 100%;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+}
+
+.bodyBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.bodyBox .inputBox {
+    position: relative;
+}
+
+.footBox {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#text {
+    position: static;
+}

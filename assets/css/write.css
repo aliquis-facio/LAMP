@@ -1,0 +1,19 @@
+.container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    vertical-align: middle;
+}
+
+.post_title {
+    height: 40px;
+    width: 100%;
+
+    font-size: large;
+}
+
+.post_content {
+    height: 360px;
+    width: 100%;
+
+    font-size: large;
+}

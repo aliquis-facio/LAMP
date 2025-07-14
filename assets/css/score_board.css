@@ -1,0 +1,26 @@
+.logo {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+}
+
+.bodyBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.footBox {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.result {
+    text-align: center;
+    color: pink;
+    font-size: 20px;
+}
