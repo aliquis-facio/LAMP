@@ -22,6 +22,7 @@ include("../functions/user_session");
         <form id="post_write_form" action="../functions/post_write_proc.php" method="POST">
             <input class="post_title" name = "title" type="text" placeholder="제목을 입력해주세요">
             <textarea class="post_content" name="substance" placeholder="내용을 입력해주세요"></textarea>
+            <input type="file" name="file">
         </form>
     </div>
 </body>

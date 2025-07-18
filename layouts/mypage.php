@@ -4,39 +4,44 @@
 <?php
     include_once("../includes/head.php");
     include_once("../functions/user_session.php");
-    include_once("../functions/sql_connect.php");
+    include_once("../functions/sql_connect.php"); // $conn은 PDO 객체
 ?>
 
 <body>
     <div class="container">
-        <div class = "head_box">
+        <div class="head_box">
             <?php include_once("../includes/nav.php"); ?>
-            
             <h1>내 정보</h1>
         </div>
-                    
+        
         <div class="body_box">
             <div>
                 <p>기본 정보</p>
                 <?php
-                    $select_sql = "SELECT * FROM `member` WHERE id=?";
+                try {
+                    $select_sql = "SELECT * FROM member WHERE id = :id";
                     $stmt = $conn->prepare($select_sql);
-                    $stmt->bind_param('s', $user_id);
-                    $stmt->execute();
-                    $ret = $stmt->get_result();
-                    $row = $ret->fetch_assoc();
+                    $stmt->execute([':id' => $user_id]);
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    echo "<div>
-                        <p>이름: {$row['name']}</p>
-                        <p>ID: {$row['id']}</p>
-                    </div>
-                    <div>
-                        <p>전화번호: {$row['number']}</p>
-                        <p>생년월일: {$row['birth']}</p>
-                    </div>
-                    <div>
-                        <p>이메일: {$row['email']}</p>
-                    </div>";
+                    if ($row) {
+                        echo "<div>
+                                <p>이름: " . htmlspecialchars($row['name']) . "</p>
+                                <p>ID: " . htmlspecialchars($row['id']) . "</p>
+                              </div>
+                              <div>
+                                <p>전화번호: " . htmlspecialchars($row['number']) . "</p>
+                                <p>생년월일: " . htmlspecialchars($row['birth']) . "</p>
+                              </div>
+                              <div>
+                                <p>이메일: " . htmlspecialchars($row['email']) . "</p>
+                              </div>";
+                    } else {
+                        echo "<p>회원 정보를 불러올 수 없습니다.</p>";
+                    }
+                } catch (PDOException $e) {
+                    echo "<p>DB 오류 발생: " . htmlspecialchars($e->getMessage()) . "</p>";
+                }
                 ?>
             </div>
         </div>
@@ -47,3 +52,4 @@
         </div>
     </div>
 </body>
+</html>

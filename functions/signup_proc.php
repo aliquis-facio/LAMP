@@ -1,56 +1,63 @@
 <?php
-include_once("./error_report");
-include_once("./sql_connect.php");
+include_once("./error_report.php");
+include_once("./sql_connect.php"); // $conn은 PDO 객체
 
-// get paremeters
-$id = $_POST["id"];
-$pw = hash('sha512', $_POST["pw"]);
-$email = $_POST["email"];
-$name = $_POST["name"];
-$birth = $_POST["birth"];
-echo $birth;
-$number = $_POST["number"];
+// password_hash(string $password, string|int|null $algo, array $options = []): string
 
-// id overlap check
-$select_sql = "SELECT * FROM member WHERE id = ?";
-$stmt = $conn->prepare($select_sql);
-$stmt->bind_param('s', $id);
-$stmt->execute();
-$ret = $stmt->get_result();
-$cnt = $ret->num_rows;
-$stmt->reset();
+// 입력값 수집
+$id = $_POST["id"] ?? '';
+$pw = hash('sha512', $_POST["pw"] ?? '');
+$email = $_POST["email"] ?? '';
+$name = $_POST["name"] ?? '';
+$birth = $_POST["birth"] ?? '';
+$number = $_POST["number"] ?? '';
 
-if ($cnt == 1) {
-    echo "<script>
-    alert('이미 존재하는 아이디입니다!');
-    history.back();
-    </script>";
+// 유효성 검사
+if (!$id || !$pw || !$email || !$name || !$birth || !$number) {
+    echo "<script>alert('모든 항목을 입력해주세요.'); history.back();</script>";
     exit;
-} else {
-    // new register
-    $insert_sql = "INSERT INTO `member` VALUES (:id, :pw, :name, :birth, :number, :email)";
-    $stmt = $conn->prepare($insert_sql);
-    $stmt->bind_param(':id', $id);
-    $stmt->bind_param(':pw', $pw);
-    $stmt->bind_param(':name', $name);
-    $stmt->bind_param(':birth', $birth);
-    $stmt->bind_param(':number', $number);
-    $stmt->bind_param(':email', $email);
-    $stmt->execute();
-    $error_code = $stmt->errno;
-    $stmt->close();
-    
-    if ($error_code == 0) {
+}
+
+try {
+    // 아이디 중복 체크
+    $select_sql = "SELECT id FROM member WHERE id = :id";
+    $stmt = $conn->prepare($select_sql);
+    $stmt->execute([':id' => $id]);
+    $cnt = $stmt->rowCount();
+
+    if ($cnt > 0) {
         echo "<script>
-        alert('회원가입되셨습니다!');
-        location.href = '/layouts/sign-in.php';
+            alert('이미 존재하는 아이디입니다!');
+            history.back();
         </script>";
         exit;
-    } else {
-        echo "<script>
-        alert('잘못 입력하셨습니다!');
-        history.back();
-        </script>";
     }
+
+    // 신규 회원가입
+    $insert_sql = "INSERT INTO member (id, pw, name, birth, number, email)
+                   VALUES (:id, :pw, :name, :birth, :number, :email)";
+    $stmt = $conn->prepare($insert_sql);
+    $stmt->execute([
+        ':id' => $id,
+        ':pw' => $pw,
+        ':name' => $name,
+        ':birth' => $birth,
+        ':number' => $number,
+        ':email' => $email
+    ]);
+
+    echo "<script>
+        alert('회원가입 되셨습니다!');
+        location.href = '/layouts/sign-in.php';
+    </script>";
+    exit;
+
+} catch (PDOException $e) {
+    echo "<script>
+        alert('회원가입 중 오류가 발생했습니다!');
+        history.back();
+    </script>";
+    // 개발 중일 경우: error_log($e->getMessage());
+    exit;
 }
 ?>
