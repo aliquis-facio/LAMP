@@ -22,17 +22,64 @@ $cnt_coment = $row["CNT"] ?? 0;
 // 게시판 검색
 $search_string = isset($_GET['search']) ? htmlentities($_GET['search']) : "";
 
+// 페이지네이션
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max($page, 1); // 1보다 작을 수 없게
+$page_size = 15;
+$start = ($page - 1) * $page_size;
+$num = $start;
+$limit = $start + $page_size;
+
 if ($search_string == "") {
-    $stmt3 = $conn->prepare("SELECT * FROM board ORDER BY createdDate DESC");
+    $stmt4 = $conn->prepare("SELECT COUNT(*) FROM board");
+    $stmt4->execute();
+} else {
+    $stmt4 = $conn->prepare("SELECT COUNT(*) FROM board WHERE title LIKE :search");
+    $stmt4->execute([':search' => "%{$search_string}%"]);
+}
+$total_post = $stmt4->fetchColumn();
+
+if ($search_string == "") {
+    $sql = "
+    SELECT b.*, COUNT(c.id) AS coment_count
+    FROM board b
+    JOIN coment c ON b.id = c.id
+    GROUP BY b.id
+    ORDER BY b.createdDate DESC
+    LIMIT :start, :limit
+    ";
+
+    $stmt3 = $conn->prepare($sql);
+    $stmt3->bindValue(':start', $start, PDO::PARAM_INT);
+    $stmt3->bindValue(':limit', $page_size, PDO::PARAM_INT);
     $stmt3->execute();
 } else {
-    $search_pattern = "%" . $search_string . "%";
-    $stmt3 = $conn->prepare("SELECT * FROM board WHERE title LIKE :search ORDER BY createdDate DESC");
-    $stmt3->execute([':search' => $search_pattern]);
+    $sql = "
+    SELECT b.*, COUNT(c.id) AS coment_count
+    FROM board b
+    JOIN coment c ON b.id = c.id
+    WHERE title LIKE :search
+    GROUP BY b.id
+    ORDER BY b.createdDate DESC
+    LIMIT :start, :limit
+    ";
+
+    $stmt3 = $conn->prepare($sql);
+    $stmt3 = $conn->prepare("SELECT * FROM board WHERE title LIKE :search ORDER BY createdDate DESC LIMIT :start, :limit");
+    $stmt3->bindValue(':search', "%{$search_string}%", PDO::PARAM_STR);
+    $stmt3->bindValue(':start', $start, PDO::PARAM_INT);
+    $stmt3->bindValue(':limit', $page_size, PDO::PARAM_INT);
+    $stmt3->execute();
 }
 
 $posts = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-$num_of_total_post = count($posts);
+
+$total_pages = ceil($total_post / $page_size);
+
+$pagination_size = 5;
+$current_block = ceil($page / $pagination_size);
+$start_page = ($current_block - 1) * $pagination_size + 1;
+$end_page = min($start_page + $pagination_size - 1, $total_pages);
 ?>
 
 <body>
@@ -55,13 +102,13 @@ $num_of_total_post = count($posts);
         <div class="title_panel">
             <div>
                 <form id="post_search" class="search_box" action="">
-                    <input type="text" name="search" value="">
+                    <input type="text" name="search" value="" placeholder="제목">
                     <button class="green" type="submit">검색</button>
                 </form>
             </div>
 
             <p class="board_title">자유게시판</p>
-            <p class='the_num_of_post'><?php echo $num_of_total_post ?>개의 글</p>
+            <p class='the_num_of_post'><?php echo $total_post ?>개의 글</p>
         </div>
 
         <hr>
@@ -79,10 +126,6 @@ $num_of_total_post = count($posts);
                 </thead>
                 <tbody>
                     <?php
-                    $num = 1;
-                    $page_size = 15;
-                    $page_total_post = ceil($num_of_total_post / $page_size);
-                    $page_num = 1;
 
                     foreach ($posts as $row) {
                         $created_date = str_replace("-", ".", substr($row['createdDate'], 0, 16));
@@ -101,23 +144,27 @@ $num_of_total_post = count($posts);
                     <tr>
                         <td colspan="5">
                             <div class="links">
-                                <a href="#1">&laquo;</a>
                                 <?php
-                                $p1 = $page_num - 1;
-                                $p2 = $page_num * 5 - 4;
-                                $p3 = $page_num * 5 - 3;
-                                $p4 = $page_num * 5 - 2;
-                                $p5 = $page_num * 5 - 1;
-                                $p6 = $page_num * 5;
-                                $p7 = ($page_num < $page_total_post) ? $page_num + 1 : $page_num;
-                                echo "<a href=\"#{$p1}\">&lt;</a>";
-                                if ($page_total_post >= $p2) echo "<a href=\"#{$p2}\">{$p2}</a>";
-                                if ($page_total_post >= $p3) echo "<a href=\"#{$p3}\">{$p3}</a>";
-                                if ($page_total_post >= $p4) echo "<a href=\"#{$p4}\">{$p4}</a>";
-                                if ($page_total_post >= $p5) echo "<a href=\"#{$p5}\">{$p5}</a>";
-                                if ($page_total_post >= $p6) echo "<a href=\"#{$p6}\">{$p6}</a>";
-                                echo "<a href=\"#{$p7}\">&gt;</a>";
-                                echo "<a href=\"#{$page_total_post}\">&raquo;</a>";
+                                $total_pages = ceil($total_post / $page_size);
+                                $pagination_size = 5;
+                                $current_block = ceil($page / $pagination_size);
+                                $start_page = ($current_block - 1) * $pagination_size + 1;
+                                $end_page = min($start_page + $pagination_size - 1, $total_pages);
+
+                                echo "<a href='?page=1'>&laquo;</a>";
+                                if ($page > 1) {
+                                    echo "<a href='?page=" . ($page - 1) . "'>&lt;</a>";
+                                }
+
+                                for ($i = $start_page; $i <= $end_page; $i++) {
+                                    $active = ($i == $page) ? "class='active'" : "";
+                                    echo "<a $active href='?page=$i'>$i</a>";
+                                }
+
+                                if ($page < $total_pages) {
+                                    echo "<a href='?page=" . ($page + 1) . "'>&gt;</a>";
+                                }
+                                echo "<a href='?page=$total_pages'>&raquo;</a>";
                                 ?>
                             </div>
                         </td>

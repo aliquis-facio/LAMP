@@ -12,13 +12,13 @@ if (!$coment_id || !$post_id) {
 
 try {
     // 댓글 삭제 쿼리 실행
-    $delete_sql = "DELETE FROM coment WHERE coment_id = :coment_id";
+    $delete_sql = "DELETE FROM coment WHERE id = :id";
     $stmt = $conn->prepare($delete_sql);
-    $stmt->bindParam(':coment_id', $coment_id, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $coment_id, PDO::PARAM_STR);
     $stmt->execute();
 
     echo "<script>alert('삭제되었습니다');</script>";
-    header("Location: ../post_view.php?post_id={$post_id}");
+    header("Location: ../layouts/post-view.php?post_id={$post_id}");
     exit;
 } catch (PDOException $e) {
     echo "DB 오류: " . $e->getMessage();

@@ -20,17 +20,17 @@ if (!$reply || !$coment_id || !$post_id) {
 
 try {
     // 댓글 업데이트
-    $update_sql = "UPDATE coment SET reply = :reply, created_date = :created_date WHERE coment_id = :coment_id";
+    $update_sql = "UPDATE coment SET reply = :reply, createdDate = :createdDate WHERE id = :id";
     $stmt = $conn->prepare($update_sql);
     $stmt->execute([
         ':reply' => $reply,
-        ':created_date' => $created_date,
-        ':coment_id' => $coment_id
+        ':createdDate' => $created_date,
+        ':id' => $coment_id
     ]);
 
     echo "<script>
         alert('수정되었습니다');
-        location.replace('../post_view.php?post_id={$post_id}');
+        location.replace('../layouts/post-view.php?post_id={$post_id}');
     </script>";
 
 } catch (PDOException $e) {

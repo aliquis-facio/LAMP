@@ -7,11 +7,11 @@ include_once("../includes/head.php");
 <body>
     <div class = 'container'>
         <div class = "logo">
-            <?php include_once("/includes/nav.php"); ?>
+            <?php include_once("../includes/nav.php"); ?>
         </div>
     
         <div class = "bodyBox cyan">
-            <form id="sign_up_form" action="./inner/signup_proc.php" method="POST">
+            <form id="sign_up_form" action="../functions/signup_proc.php" method="POST">
                 <input class = "long" name = "id" type="text" placeholder = "ID">
                 <input class = "long" name = "pw" type="password" placeholder="PW">
                 <input class = "long" name = "email" type="text" placeholder="example@example.com">

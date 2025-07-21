@@ -4,7 +4,7 @@ include_once("./user_session.php");
 
 // 파라미터 준비
 $writer = $_SESSION['user_id'] ?? null;
-$reply = $_POST["reply"] ?? null;
+$reply = htmlspecialchars($_POST["reply"]) ?? null;
 $post_id = $_POST["post_id"] ?? null;
 
 date_default_timezone_set('Asia/Seoul');
