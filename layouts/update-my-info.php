@@ -4,7 +4,7 @@
 <?php
 include_once("../includes/head.php");
 include_once("../functions/user_session.php");
-include_once("../functions/sql_connect.php"); // $pdo 객체가 반환된다고 가정
+include_once("../functions/sql_connect.php");
 ?>
 
 <body>
@@ -56,7 +56,6 @@ include_once("../functions/sql_connect.php"); // $pdo 객체가 반환된다고 
                     }
                 } catch (PDOException $e) {
                     echo "<script>alert('오류가 발생했습니다.'); history.back();</script>";
-                    // 로그 기록을 원한다면 error_log($e->getMessage());
                 }
                 ?>
             </div>

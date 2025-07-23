@@ -4,7 +4,7 @@
 <?php
 include_once("../includes/head.php");
 include("../functions/user_session.php");
-include("../functions/sql_connect.php"); // $conn은 PDO 객체
+include("../functions/sql_connect.php");
 
 $user_id = $_SESSION['user_id'] ?? null;
 $post_id = $_GET['post_id'] ?? null;

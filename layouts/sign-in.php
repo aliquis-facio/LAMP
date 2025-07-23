@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <?php
-include_once("../functions/error_report.php");
 include_once("../includes/head.php");
 ?>
 

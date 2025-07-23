@@ -3,14 +3,13 @@
 
 <?php
 include_once("../includes/head.php");
-include_once("./inner/error_report.php");
 
 if (!isset($_SESSION["user_id"])) {
     header("Location: ./sign-in.php");
 }
 
 include_once("./inner/user_session.php");
-include_once("./inner/sql_connect.php"); // $conn은 PDO 객체
+include_once("./inner/sql_connect.php");
 ?>
 
 <body>

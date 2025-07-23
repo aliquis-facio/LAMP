@@ -1,5 +1,4 @@
 <?php
-include_once("../functions/error_report.php");
 include_once("../includes/head.php");
 include_once("../functions/user_session.php");
 include_once("../functions/sql_connect.php");

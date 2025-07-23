@@ -4,7 +4,7 @@
 <?php
     include_once("../includes/head.php");
     include_once("../functions/user_session.php");
-    include_once("../functions/sql_connect.php"); // $conn은 PDO 객체
+    include_once("../functions/sql_connect.php");
 ?>
 
 <body>
