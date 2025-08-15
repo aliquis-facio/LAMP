@@ -2,8 +2,8 @@
 // DB 설정 상수
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'admin');
-define('DB_PASSWORD', 'admin');
-define('DB_NAME', 'NotOK');
+define('DB_PASSWORD', 'student1234');
+define('DB_NAME', 'LAMP');
 
 $dsn = 'mysql:host=' . DB_SERVER . ';dbname=' . DB_NAME . ';charset=utf8mb4';
 

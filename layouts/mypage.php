@@ -19,15 +19,15 @@
                 <p>기본 정보</p>
                 <?php
                 try {
-                    $select_sql = "SELECT * FROM member WHERE id = :id";
+                    $select_sql = "SELECT * FROM member WHERE uid = :uid";
                     $stmt = $conn->prepare($select_sql);
-                    $stmt->execute([':id' => $user_id]);
+                    $stmt->execute([':uid' => $uid]);
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($row) {
                         echo "<div>
                                 <p>이름: " . htmlspecialchars($row['name']) . "</p>
-                                <p>ID: " . htmlspecialchars($row['id']) . "</p>
+                                <p>ID: " . htmlspecialchars($row['uid']) . "</p>
                               </div>
                               <div>
                                 <p>전화번호: " . htmlspecialchars($row['number']) . "</p>

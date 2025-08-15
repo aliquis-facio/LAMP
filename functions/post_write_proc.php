@@ -7,12 +7,12 @@ if (!session_id()) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $writer = htmlspecialchars($_SESSION['user_id']);
+    $writer = htmlspecialchars($_SESSION['uid']);
     date_default_timezone_set('Asia/Seoul');
     $created_date = date('Y-m-d H:i:s');
     $title = htmlspecialchars($_POST["title"]);
     $content = htmlspecialchars($_POST["substance"]);
-    $post_id = hash('sha256', $title . $writer . $created_date);
+    $pid = hash('sha256', $title . $writer . $created_date);
     $view = 0;
 
     $fid = null;
@@ -58,17 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
         // insert query 구성
         if ($fid !== null && $fName !== null) {
-            $sql = "INSERT INTO board (id, writer, title, content, fid, fName, createdDate, view)
-                    VALUES (:id, :writer, :title, :content, :fid, :fName, :createdDate, :view)";
+            $sql = "INSERT INTO board (pid, writer, title, content, fid, fName, createdDate, view)
+                    VALUES (:pid, :writer, :title, :content, :fid, :fName, :createdDate, :view)";
         } else {
-            $sql = "INSERT INTO board (id, writer, title, content, createdDate, view)
-                    VALUES (:id, :writer, :title, :content, :createdDate, :view)";
+            $sql = "INSERT INTO board (pid, writer, title, content, createdDate, view)
+                    VALUES (:pid, :writer, :title, :content, :createdDate, :view)";
         }
 
         $stmt = $conn->prepare($sql);
 
         // 공통 바인딩
-        $stmt->bindParam(':id', $post_id);
+        $stmt->bindParam(':pid', $pid);
         $stmt->bindParam(':writer', $writer);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':content', $content);

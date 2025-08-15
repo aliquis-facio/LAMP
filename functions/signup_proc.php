@@ -5,7 +5,7 @@ include_once("./sql_connect.php"); // $conn은 PDO 객체
 // password_hash(string $password, string|int|null $algo, array $options = []): string
 
 // 입력값 수집
-$id = $_POST["id"] ?? '';
+$uid = $_POST["uid"] ?? '';
 $pw = hash('sha512', $_POST["pw"] ?? '');
 $email = $_POST["email"] ?? '';
 $name = $_POST["name"] ?? '';
@@ -13,16 +13,16 @@ $birth = $_POST["birth"] ?? '';
 $number = $_POST["number"] ?? '';
 
 // 유효성 검사
-if (!$id || !$pw || !$email || !$name || !$birth || !$number) {
+if (!$uid || !$pw || !$email || !$name || !$birth || !$number) {
     echo "<script>alert('모든 항목을 입력해주세요.'); history.back();</script>";
     exit;
 }
 
 try {
     // 아이디 중복 체크
-    $select_sql = "SELECT id FROM member WHERE id = :id";
+    $select_sql = "SELECT uid FROM member WHERE uid = :uid";
     $stmt = $conn->prepare($select_sql);
-    $stmt->execute([':id' => $id]);
+    $stmt->execute([':uid' => $uid]);
     $cnt = $stmt->rowCount();
 
     if ($cnt > 0) {
@@ -34,11 +34,11 @@ try {
     }
 
     // 신규 회원가입
-    $insert_sql = "INSERT INTO member (id, pw, name, birth, number, email)
-                   VALUES (:id, :pw, :name, :birth, :number, :email)";
+    $insert_sql = "INSERT INTO member (uid, pw, name, birth, number, email)
+                   VALUES (:uid, :pw, :name, :birth, :number, :email)";
     $stmt = $conn->prepare($insert_sql);
     $stmt->execute([
-        ':id' => $id,
+        ':uid' => $uid,
         ':pw' => $pw,
         ':name' => $name,
         ':birth' => $birth,

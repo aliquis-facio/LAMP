@@ -51,9 +51,9 @@ function post_modify_submit() {
     if (check) form.submit();
 }
 
-function post_delete(post_id) {
+function post_delete(pid) {
     let check = confirm("Are You Sure Delete This Post?");
-    if (check) location.href='../functions/post_delete.php?post_id='+post_id;
+    if (check) location.href='../functions/post_delete.php?pid='+pid;
 }
 
 function coment_write_submit() {
@@ -74,14 +74,14 @@ function coment_write_submit() {
     }
 }
 
-function coment_modify(coment_id, post_id) {
-    let div = document.getElementById(coment_id);
+function coment_modify(cid, pid) {
+    let div = document.getElementById(cid);
     let coment = div.firstElementChild.textContent;
     
     div.innerHTML = "<form id=\"coment_form\" action=\"../functions/coment_modify.php\" method=\"post\">\n"+
                         "<input id=\"reply_input\" type=\"text\" name=\"reply\" value=\""+coment+"\">\n"+
-                        "<input type=\"hidden\" name=\"coment_id\" value=\""+coment_id+"\">\n"+
-                        "<input type=\"hidden\" name=\"post_id\" value=\""+post_id+"\">\n"+
+                        "<input type=\"hidden\" name=\"cid\" value=\""+cid+"\">\n"+
+                        "<input type=\"hidden\" name=\"pid\" value=\""+pid+"\">\n"+
                         "<button class=\"orange\" type=\"button\" onclick=\"coment_modify_submit()\">수정</button>\n"+
                     "</form>";
 }
@@ -104,7 +104,7 @@ function coment_modify_submit() {
     }
 }
 
-function coment_delete(coment_id, post_id) {
+function coment_delete(cid, pid) {
     let check = confirm("정말로 댓글을 지우시겠습니까?");
-    if (check) location.href='../functions/coment_delete.php?coment_id='+coment_id+'&post_id='+post_id;
+    if (check) location.href='../functions/coment_delete.php?cid='+cid+'&pid='+pid;
 }

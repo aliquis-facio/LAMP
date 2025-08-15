@@ -6,21 +6,21 @@ include_once("../includes/head.php");
 include("../functions/user_session.php");
 include("../functions/sql_connect.php");
 
-$user_id = $_SESSION['user_id'] ?? null;
-$post_id = $_GET['post_id'] ?? null;
+$uid = $_SESSION['uid'] ?? null;
+$pid = $_GET['pid'] ?? null;
 
 $title = '';
-$substance = '';
+$content = '';
 
 try {
-    if ($post_id) {
-        $stmt = $conn->prepare("SELECT * FROM board WHERE post_id = :post_id");
-        $stmt->execute([':post_id' => $post_id]);
+    if ($pid) {
+        $stmt = $conn->prepare("SELECT * FROM board WHERE pid = :pid");
+        $stmt->execute([':pid' => $pid]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
             $title = $row['title'];
-            $substance = $row['substance'];
+            $content = $row['content'];
         } else {
             echo "<script>alert('게시글을 찾을 수 없습니다.'); history.back();</script>";
             exit;
@@ -51,9 +51,9 @@ try {
             <input id="title_modify_input" class="post_title" type="text" name="title"
                    value="<?php echo htmlspecialchars($title); ?>" required>
 
-            <textarea class="post_substance" name="substance" required><?php echo htmlspecialchars($substance); ?></textarea>
+            <textarea class="post_content" name="content" required><?php echo htmlspecialchars($content); ?></textarea>
 
-            <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
+            <input type="hidden" name="pid" value="<?php echo htmlspecialchars($pid); ?>">
         </form>
     </div>
 

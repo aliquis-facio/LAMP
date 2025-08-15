@@ -5,16 +5,17 @@
 include_once("../includes/head.php");
 include_once("../functions/user_session.php");
 include_once("../functions/sql_connect.php");
+include_once("../functions/error_report.php");
 
 // 현재 유저의 작성글 수
-$stmt1 = $conn->prepare("SELECT COUNT(id) AS CNT FROM board WHERE writer = :writer");
-$stmt1->execute([':writer' => $user_id]);
+$stmt1 = $conn->prepare("SELECT COUNT(pid) AS CNT FROM board WHERE writer = :writer");
+$stmt1->execute([':writer' => $uid]);
 $row = $stmt1->fetch(PDO::FETCH_ASSOC);
 $cnt_post = $row["CNT"] ?? 0;
 
 // 현재 유저의 댓글 수
-$stmt2 = $conn->prepare("SELECT COUNT(id) AS CNT FROM coment WHERE writer = :writer");
-$stmt2->execute([':writer' => $user_id]);
+$stmt2 = $conn->prepare("SELECT COUNT(cid) AS CNT FROM coment WHERE writer = :writer");
+$stmt2->execute([':writer' => $uid]);
 $row = $stmt2->fetch(PDO::FETCH_ASSOC);
 $cnt_coment = $row["CNT"] ?? 0;
 
@@ -38,38 +39,21 @@ if ($search_string == "") {
 }
 $total_post = $stmt4->fetchColumn();
 
-if ($search_string == "") {
-    $sql = "
-    SELECT b.*, COUNT(c.id) AS coment_count
-    FROM board b
-    JOIN coment c ON b.id = c.id
-    GROUP BY b.id
-    ORDER BY b.createdDate DESC
-    LIMIT :start, :limit
-    ";
-
-    $stmt3 = $conn->prepare($sql);
-    $stmt3->bindValue(':start', $start, PDO::PARAM_INT);
-    $stmt3->bindValue(':limit', $page_size, PDO::PARAM_INT);
-    $stmt3->execute();
-} else {
-    $sql = "
-    SELECT b.*, COUNT(c.id) AS coment_count
-    FROM board b
-    JOIN coment c ON b.id = c.id
-    WHERE title LIKE :search
-    GROUP BY b.id
-    ORDER BY b.createdDate DESC
-    LIMIT :start, :limit
-    ";
-
-    $stmt3 = $conn->prepare($sql);
-    $stmt3 = $conn->prepare("SELECT * FROM board WHERE title LIKE :search ORDER BY createdDate DESC LIMIT :start, :limit");
-    $stmt3->bindValue(':search', "%{$search_string}%", PDO::PARAM_STR);
-    $stmt3->bindValue(':start', $start, PDO::PARAM_INT);
-    $stmt3->bindValue(':limit', $page_size, PDO::PARAM_INT);
-    $stmt3->execute();
-}
+$sql = "
+SELECT b.pid, b.writer, b.title, b.createdDate, b.view, COUNT(c.cid) AS coment_count
+FROM board b
+LEFT JOIN coment c ON b.pid = c.pid
+" . ($search_string ? "WHERE b.title LIKE :search" : "") . "
+GROUP BY b.pid, b.writer, b.title, b.createdDate, b.view
+ORDER BY b.createdDate DESC
+LIMIT :start, :limit
+";
+$stmt3 = $conn->prepare($sql);
+if (!empty($search_string))
+    $stmt3->bindValue(':search', $search_string, PDO::PARAM_STR);
+$stmt3->bindValue(':start', $start, PDO::PARAM_INT);
+$stmt3->bindValue(':limit', $page_size, PDO::PARAM_INT);
+$stmt3->execute();
 
 $posts = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
@@ -89,9 +73,9 @@ $end_page = min($start_page + $pagination_size - 1, $total_pages);
     </div>
 
     <div class="side_box">
-        <p><b><?php echo $user_id ?></b></p>
+        <p><b><?php echo $uid ?></b></p>
         <p><a href="./mypage.php">내 정보</a></p>
-        <p><a href="./post-list.php?writer=<?php echo $user_id ?>">내 게시글</a></p>
+        <p><a href="./post-list.php?writer=<?php echo $uid ?>">내 게시글</a></p>
         <p>내가 쓴 게시글: <?php echo $cnt_post ?>개</p>
         <p>내가 쓴 댓글: <?php echo $cnt_coment ?>개</p>
         <a href="./post-write.php">글쓰기</a>
@@ -125,12 +109,11 @@ $end_page = min($start_page + $pagination_size - 1, $total_pages);
                 </thead>
                 <tbody>
                     <?php
-
                     foreach ($posts as $row) {
                         $created_date = str_replace("-", ".", substr($row['createdDate'], 0, 16));
                         echo "<tr>
                             <td>{$num}</td>
-                            <td><a href=\"./post-view.php?post_id={$row['id']}\">{$row['title']}</a></td>
+                            <td><a href=\"./post-view.php?pid={$row['pid']}\">{$row['title']}</a></td>
                             <td><a href=\"./post-list.php?writer={$row['writer']}\">{$row['writer']}</a></td>
                             <td>{$created_date}</td>
                             <td>{$row['view']}</td>
@@ -174,10 +157,5 @@ $end_page = min($start_page + $pagination_size - 1, $total_pages);
     </div>
 </div>
 
-<?php
-echo "request url: " . $_SERVER['REQUEST_URI'] . "\n";
-echo "php self: " . $_SERVER['PHP_SELF'] . "\n";
-echo "query string: " . $_SERVER['QUERY_STRING'] . "\n";
-?>
 </body>
 </html>

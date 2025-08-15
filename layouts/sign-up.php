@@ -12,7 +12,7 @@ include_once("../includes/head.php");
     
         <div class = "bodyBox cyan">
             <form id="sign_up_form" action="../functions/signup_proc.php" method="POST">
-                <input class = "long" name = "id" type="text" placeholder = "ID">
+                <input class = "long" name = "uid" type="text" placeholder = "ID">
                 <input class = "long" name = "pw" type="password" placeholder="PW">
                 <input class = "long" name = "email" type="text" placeholder="example@example.com">
                 <input class = "long" name = "name" type="text" placeholder="Name">

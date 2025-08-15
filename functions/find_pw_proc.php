@@ -4,16 +4,16 @@ include("./sql_connect.php"); // $conn은 PDO 객체
 
 // 보안을 위해 비밀번호 직접 노출을 막고, “비밀번호 재설정 페이지 안내” 방식으로 변경하는 것도 추천
 
-function get_pw(PDO $conn, string $id, string $name, string $type, string $var): void {
+function get_pw(PDO $conn, string $uid, string $name, string $type, string $var): void {
     if (!in_array($type, ['email', 'number'])) {
         echo "<script>alert('잘못된 요청입니다'); location.replace('../find_pw.php');</script>";
         exit;
     }
 
-    $select_sql = "SELECT pw FROM member WHERE id = :id AND name = :name AND {$type} = :var";
+    $select_sql = "SELECT pw FROM member WHERE uid = :uid AND name = :name AND {$type} = :var";
     $stmt = $conn->prepare($select_sql);
     $stmt->execute([
-        ':id' => $id,
+        ':uid' => $uid,
         ':name' => $name,
         ':var' => $var
     ]);

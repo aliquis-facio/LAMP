@@ -21,8 +21,8 @@ include_once("../functions/sql_connect.php");
                 <p>변경하지 않을 시 공란으로 두시면 됩니다</p>
                 <?php
                 try {
-                    $select_sql = "SELECT * FROM `member` WHERE id = ?";
-                    $stmt = $pdo->prepare($select_sql);
+                    $select_sql = "SELECT * FROM `member` WHERE uid = ?";
+                    $stmt = $conn->prepare($select_sql);
                     $stmt->execute([$user_id]);
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

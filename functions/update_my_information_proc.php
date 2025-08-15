@@ -4,16 +4,16 @@ include_once("./sql_connect.php"); // $conn은 PDO 객체
 
 try {
     // 현재 유저 정보 가져오기
-    $select_sql = "SELECT * FROM member WHERE id = :id";
+    $select_sql = "SELECT * FROM member WHERE uid = :uid";
     $stmt = $conn->prepare($select_sql);
-    $stmt->execute([':id' => $user_id]);
+    $stmt->execute([':uid' => $uid]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$row) {
         throw new Exception("사용자 정보를 찾을 수 없습니다.");
     }
 
-    $id = $row['id'];
+    $uid = $row['uid'];
     $curr_pw = $row['pw'];
     $curr_name = $row['name'];
     $curr_birth = $row['birth'];
@@ -41,7 +41,7 @@ try {
     // 사용자 정보 업데이트
     $update_sql = "UPDATE member 
                    SET name = :name, birth = :birth, number = :number, email = :email, pw = :pw 
-                   WHERE id = :id";
+                   WHERE uid = :uid";
 
     $stmt = $conn->prepare($update_sql);
     $stmt->execute([
@@ -50,7 +50,7 @@ try {
         ':number' => $new_number,
         ':email' => $new_email,
         ':pw' => $new_pw,
-        ':id' => $id
+        ':uid' => $uid
     ]);
 
     echo "<script>

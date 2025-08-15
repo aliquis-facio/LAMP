@@ -3,13 +3,8 @@
 
 <?php
 include_once("../includes/head.php");
-
-if (!isset($_SESSION["user_id"])) {
-    header("Location: ./sign-in.php");
-}
-
-include_once("./inner/user_session.php");
-include_once("./inner/sql_connect.php");
+include_once("../functions/user_session.php");
+include_once("../functions/sql_connect.php");
 ?>
 
 <body>
@@ -19,12 +14,12 @@ include_once("./inner/sql_connect.php");
 
     <div class="headBox">
         <?php
-            $user_id = $_SESSION['user_id'] ?? '';
+            $uid = $_SESSION['uid'] ?? '';
             $writer = $_GET['writer'] ?? '';
 
             echo "<h1>" . htmlspecialchars($writer) . "님의 글 보기</h1>";
-            if ($user_id !== $writer) {
-                echo "<a href=\"./post-list.php?writer=" . urlencode($user_id) . "\">내 게시글</a>";
+            if ($uid !== $writer) {
+                echo "<a href=\"./post-list.php?writer=" . urlencode($uid) . "\">내 게시글</a>";
             }
 
             $stmt = $conn->prepare("SELECT * FROM board WHERE writer = :writer ORDER BY createdDate DESC");
@@ -56,10 +51,10 @@ include_once("./inner/sql_connect.php");
                     $created_date = str_replace("-", ".", substr($row['created_date'], 0, 16));
                     echo "<tr>
                         <td>{$num}</td>
-                        <td><a href=\"./post_view.php?post_id=" . htmlspecialchars($row['post_id']) . "\">" . htmlspecialchars($row['title']) . "</a></td>
-                        <td><a href=\"./post_list.php?writer=" . htmlspecialchars($row['writer']) . "\">" . htmlspecialchars($row['writer']) . "</a></td>
+                        <td><a href=\"./post-view.php?pid=" . htmlspecialchars($row['pid']) . "\">" . htmlspecialchars($row['title']) . "</a></td>
+                        <td><a href=\"./post-list.php?writer=" . htmlspecialchars($row['writer']) . "\">" . htmlspecialchars($row['writer']) . "</a></td>
                         <td>{$created_date}</td>
-                        <td>" . htmlspecialchars($row['post_view']) . "</td>
+                        <td>" . htmlspecialchars($row['post-view']) . "</td>
                     </tr>";
                     $num++;
                 }
@@ -68,20 +63,6 @@ include_once("./inner/sql_connect.php");
             }
             ?>
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5">
-                    <div class="links">
-                        <a href="#">&laquo;</a>
-                        <a class="active" href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">&raquo;</a>
-                    </div>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 </body>
 </html>

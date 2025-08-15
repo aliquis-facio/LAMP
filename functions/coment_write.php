@@ -3,16 +3,16 @@ include_once("./sql_connect.php"); // $conn 은 PDO 객체
 include_once("./user_session.php");
 
 // 파라미터 준비
-$writer = $_SESSION['user_id'] ?? null;
+$writer = $_SESSION['uid'] ?? null;
 $reply = htmlspecialchars($_POST["reply"]) ?? null;
-$post_id = $_POST["post_id"] ?? null;
+$pid = $_POST["pid"] ?? null;
 
 date_default_timezone_set('Asia/Seoul');
 $created_date = (new DateTime("now"))->format('Y-m-d H:i:s');
-$coment_id = hash('sha256', $writer . $created_date);
+$cid = hash('sha256', $writer . $created_date);
 
 // 필수값 검증
-if (!$writer || !$reply || !$post_id) {
+if (!$writer || !$reply || !$pid) {
     echo "<script>
         alert('입력값이 누락되었습니다');
         history.back();
@@ -22,13 +22,13 @@ if (!$writer || !$reply || !$post_id) {
 
 try {
     // INSERT 쿼리 실행
-    $insert_sql = "INSERT INTO coment (coment_id, post_id, created_date, writer, reply)
-                   VALUES (:coment_id, :post_id, :created_date, :writer, :reply)";
+    $insert_sql = "INSERT INTO coment (cid, pid, created_date, writer, reply)
+                   VALUES (:cid, :pid, :created_date, :writer, :reply)";
     
     $stmt = $conn->prepare($insert_sql);
     $stmt->execute([
-        ':coment_id' => $coment_id,
-        ':post_id' => $post_id,
+        ':cid' => $cid,
+        ':pid' => $pid,
         ':created_date' => $created_date,
         ':writer' => $writer,
         ':reply' => $reply
@@ -36,7 +36,7 @@ try {
 
     echo "<script>
         alert('등록되었습니다');
-        location.replace('../post_view.php?post_id={$post_id}');
+        location.replace('../post_view.php?pid={$pid}');
     </script>";
 
 } catch (PDOException $e) {

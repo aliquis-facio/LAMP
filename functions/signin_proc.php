@@ -5,21 +5,20 @@ if (!session_id()) {
     session_start();
 }
 
-$id = $_POST["id"];
+$uid = $_POST["uid"];
 $pw = hash('sha512', $_POST["pw"]);
 
 try {
-    $select_sql = "SELECT * FROM member WHERE id = :id";
+    $select_sql = "SELECT * FROM member WHERE uid = :uid";
     $stmt = $conn->prepare($select_sql);
-    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':uid', $uid);
     $stmt->execute();
 
     $ret = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($ret && $ret['pw'] === $pw) {
         // 로그인 성공
-        $_SESSION['user_id'] = $ret['id'];
-        $_SESSION['user_name'] = $ret['name'];
+        $_SESSION['uid'] = $ret['uid'];
         header("Location: ../layouts/index.php");
         exit;
     } else {

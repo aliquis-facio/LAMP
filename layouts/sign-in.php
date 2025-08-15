@@ -11,7 +11,7 @@ include_once("../includes/head.php");
 
     <div class = "bodyBox cyan">
         <form id="sign_in_form" action="../functions/signin_proc.php" method="POST">
-            <input class = "long" name = "id" type="text" placeholder = "아이디">
+            <input class = "long" name = "uid" type="text" placeholder = "아이디">
             <input class = "long" name = "pw" type="password" placeholder="비밀번호">
             <button class = "long blue" type="button" onclick="sign_in_submit()">LOG IN</button>
         </form>
