@@ -61,11 +61,9 @@ try {
 
 } catch (Exception $e) {
     echo "<script>
-        alert('오류가 발생했습니다: {$e->getMessage()}');
+        alert('오류가 발생했습니다');
         history.back();
     </script>";
-    // 개발 중에는 아래 로깅 권장
-    // error_log($e->getMessage());
     exit;
 }
 ?>

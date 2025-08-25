@@ -20,7 +20,6 @@ include_once("../includes/head.php");
                 <div class="number-container">
                     <form action="../functions/find_pw_proc.php" method="post">
                         <input class = "long" name="id1" type="text" placeholder="비밀번호를 찾고자하는 아이디를 입력해주세요.">
-                        <input class = "long" name="name1" type="text" placeholder="이름">
                         <input class = "long" name="number" type="text" placeholder="휴대전화번호">
                         <button class = "long blue" type="submit">휴대전화로 인증</button>
                     </form>
@@ -33,7 +32,6 @@ include_once("../includes/head.php");
                 <div class="email-container">
                     <form action="../functions/find_pw_proc.php" method="post">
                         <input class = "long" name="id2" type="text" placeholder="비밀번호를 찾고자하는 아이디를 입력해주세요.">
-                        <input class = "long" name="name2" type="text" placeholder="이름">
                         <input class = "long" name="email" type="text" placeholder="이메일 주소">
                         <button class = "long blue" type="submit">이메일로 인증</button>
                     </form>

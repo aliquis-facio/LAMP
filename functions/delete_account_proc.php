@@ -42,7 +42,10 @@ try {
     </script>";
 
 } catch (PDOException $e) {
-    echo "<script>alert('DB 오류가 발생했습니다'); history.back();</script>";
+    echo "<script>
+    alert('오류가 발생했습니다');
+    history.back();
+    </script>";
     // error_log($e->getMessage()); // 디버깅 로그
     exit;
 }
