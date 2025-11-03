@@ -1,6 +1,6 @@
 <?php
 include_once("./error_report.php");
-include_once("./sql_connect.php"); // $conn은 PDO 객체로 가정
+include_once("./sql_connect.php");
 
 if (!session_id()) {
     session_start();
@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // 파일 업로드 처리
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] === UPLOAD_ERR_OK) {
+        echo $_FILES["image"];
         // 업로드 폴더
         $targetDir = "../uploads/";
         if (!is_dir($targetDir)) {
@@ -32,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $fid = uniqid();
         $safeFileName = $fid . preg_replace("/[^A-Za-z0-9_.-]/", $fName);
 
-        if ($image['size'] > 1 * 1024 * 1024 * 1024) {
+        if ($image['size'] > 1 * 1024 * 1024 * 1024) { # 1MB
             die("파일이 너무 큽니다.");
         }
 
@@ -83,15 +84,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $stmt->execute();
 
-        echo "<script>alert('등록되었습니다');</script>";
-        echo "<script>location.replace('../layouts/index.php');</script>";
-
+        echo    "<script>
+                    alert('등록되었습니다');
+                    location.replace('../layouts/index.php');
+                </script>";
+        exit;
     } catch (PDOException $e) {
-        echo "DB 오류: " . $e->getMessage();
+        echo    "<script>
+                    alert('오류가 발생했습니다');
+                    history.back();
+                </script>";
         exit;
     }
 } else {
-    header("Location: ../layouts/post-write.php");
-    exit();
+    echo    "<script>
+                alert('잘못된 접근 방식입니다');
+                location.replace('../layouts/post-write.php');
+            </script>";
+    exit;
 }
 ?>

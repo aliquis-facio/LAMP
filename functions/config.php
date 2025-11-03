@@ -1,4 +1,19 @@
 <?php
+// 엄격한 타입 체크 모드 활성화: 정확한 유형의 변수만 허용
+declare(strict_types=1);
+
+if(!session_id()) { // 세션이 없을 경우
+    session_start(); // 세션 실행
+}
+
+// 세션에 uid 저장
+if(!isset($_SESSION['uid'])) {
+    http_response_code(401); // 클라이언트가 인증되지 않았거나, 유효한 인증 정보가 부족해 요청이 거부됨
+    exit('로그인이 필요합니다');
+} else {
+     $uid = $_SESSION['uid'];
+}
+
 // DB 설정 상수
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'admin');

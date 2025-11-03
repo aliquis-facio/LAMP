@@ -3,32 +3,40 @@ include_once("../includes/head.php");
 include_once("../functions/user_session.php");
 include_once("../functions/sql_connect.php");
 
-$uid = $_SESSION['uid'];
-$pid = $_GET['pid'];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $uid = $_SESSION['uid'];
+    $pid = $_GET['pid'];
 
-// 게시글 조회
-$select_sql = "SELECT * FROM board WHERE pid = ?";
-$stmt = $conn->prepare($select_sql);
-$stmt->execute([$pid]);
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 게시글 조회
+    $select_sql = "SELECT * FROM board WHERE pid = ?";
+    $stmt = $conn->prepare($select_sql);
+    $stmt->execute([$pid]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($row) {
-    $writer = $row['writer'];
-    $view = $row['view'];
-    $createdDate = str_replace("-", ".", substr($row['createdDate'], 0, 16));
-    $title = html_entity_decode($row['title']);
-    $substance = nl2br(html_entity_decode($row['content'])); // 줄바꿈 유지
-    $fid = $row['fid'] ?? null;
-    $fName = $row['fName'] ?? null;
-    $img = ($fid . $fName) ?? null;
-    // 조회수 증가
-    if ($writer !== $uid) {
-        $update_sql = "UPDATE board SET view = ? WHERE pid = ?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->execute([$view + 1, $pid]);
+    if ($row) {
+        $writer = $row['writer'];
+        $view = $row['view'];
+        $createdDate = str_replace("-", ".", substr($row['createdDate'], 0, 16));
+        $title = html_entity_decode($row['title']);
+        $substance = nl2br(html_entity_decode($row['content'])); // 줄바꿈 유지
+        $fid = $row['fid'] ?? null;
+        $fName = $row['fName'] ?? null;
+        $img = ($fid . $fName) ?? null;
+        // 조회수 증가
+        if ($writer !== $uid) {
+            $update_sql = "UPDATE board SET view = ? WHERE pid = ?";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->execute([$view + 1, $pid]);
+        }
+    } else {
+        echo "<script>alert('오류가 발생했습니다');</script>";
+        exit;
     }
 } else {
-    echo "<script>alert('오류가 발생했습니다');</script>";
+    echo    "<script>
+                alert('잘못된 접근입니다.');
+                history.back();
+            </script>";
     exit;
 }
 ?>

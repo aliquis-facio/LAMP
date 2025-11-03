@@ -7,12 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('Method Not Allowed');
 }
 
-// CSRF 토큰 검증 (폼에 hidden input 으로 token을 넣어주세요)
-// if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-//     http_response_code(400);
-//     exit('Invalid CSRF token');
-// }
-
 # 입력값
 $pw = $_POST['pw'];
 $uid = $_POST['uid'];
